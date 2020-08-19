@@ -6,4 +6,4 @@ all: ${files}
 	${COMPILER} ${CFLAGS} -o ortografia ${files}
 
 run: ortografia
-	./ortografia ./brazilian.gz
+	./ortografia ./brazilian
