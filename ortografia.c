@@ -5,7 +5,7 @@
 
 // Definine o tamanho de de cada alloc no programa
 #ifndef ALLOCSIZE
-#define ALLOCSIZE 1
+#define ALLOCSIZE 100
 #endif
 
 // Ajusta LC_ALL para ser ISO 8859-1 e fecha o programa e da um aviso em caso de erro
@@ -26,33 +26,26 @@ int readDict(char ***dict, char *path) {
   if (!dictFile) {
     return -1;
   }
-  printf("- Arquivo aberto com sucesso\n");
 
   *dict = malloc(sizeof(char *) * ALLOCSIZE); // Alocar espaco para os ponteiros das strings no dicionario
   int dictAllocs = 1;                         // Variavel para guardar quantas vezes for alocado espaco para linhas no dicionario
-  printf("- Espaco para dicionario alocado\n");
 
   const int wordSize = 100; //define como 100 o tamanho maximo de cada palavra
   int currentLine = 0;      // Variavel para marcar onde deve ser salva cada palavra
 
   (*dict)[0] = malloc(sizeof(char) * wordSize);
   while (fgets((*dict)[currentLine], wordSize, dictFile)) {
-    // printf("- Colocado uma palavra na linha %d\n", currentLine);
     currentLine++;
-    // printf("- Linha atual: %d\n", currentLine);
     // Alocar mais linhas para o dicionario caso precise
     if (currentLine >= dictAllocs * ALLOCSIZE) {
-      // printf("- Necessario alocar mais espaco para linhas\n");
-      // printf("%d >= %d * %d\n", currentLine, dictAllocs, ALLOCSIZE);
       dictAllocs++;
-      *dict = realloc(*dict, sizeof(char *) * dictAllocs);
+      *dict = realloc(*dict, sizeof(char *) * dictAllocs * ALLOCSIZE);
     }
-    // printf("- Alocando espaco para a linha %d\n", currentLine);
+    // Alocagem de espaco para a linha a ser lida na proxima passagem do loop
     (*dict)[currentLine] = malloc(sizeof(char) * wordSize);
   }
 
   fclose(dictFile);
-  printf("- Deu bao no dicionario\n");
   return currentLine;
 }
 
