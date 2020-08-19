@@ -58,9 +58,11 @@ void printDict(char **dict, int lines) {
 }
 
 int main(int argc, char *argv[]) {
-  printf("> Program started.\n");
+  printf("- Program started.\n");
   makeLocale();
 
+  printf("- Started reading the dictionary\n");
+  // Leitura do dicionario
   char **dict;
   // Faz dictLines ser -1 para poder acessar o dicionario do sistema
   int dictLines = -1;
@@ -72,10 +74,30 @@ int main(int argc, char *argv[]) {
     // fprintf(stderr, "< Deu ruim no dicionario %s . Tentando com dicionario do sistema\n", argv[1]);
     dictLines = readDict(&dict, "/usr/share/dict/brazilian");
     if (dictLines == -1) {
-      fprintf(stderr, "< Deu ruim no dicionario do sistema e o passado como argumento fechando programa\n");
+      fprintf(stderr, "< Nao foi possivel acessar dicionario do sistema e nem o passado como argumento, fechando programa\n");
       exit(1);
     }
   }
+  // Fim da leitura do dicionario
+  printf("- Successfully read the dictionary\n");
+
+  // Leitura da entrada
+  // Inicializacao de variaveis para a entrada
+  char *input = malloc(0);
+  int allocsInput = 0, inputSize = -1;
+  char curChar = fgetc(stdin);
+  // Loop de leitura ate ser encontrado EOF
+  while (curChar != EOF) {
+    inputSize++;
+    // Teste se eh necessario mais espaco para a string da entrada
+    if (inputSize >= allocsInput * ALLOCSIZE) {
+      input = realloc(input, ++allocsInput * ALLOCSIZE * sizeof(char));
+    }
+    input[inputSize] = curChar;
+    curChar = fgetc(stdin);
+  }
+  input[++inputSize] = '\0';
+  // Fim da leitura da entrada
 
   // printDict(dict, dictLines);
   printf("- Terminando o programa\n");
