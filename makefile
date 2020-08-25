@@ -1,15 +1,19 @@
-COMPILER = gcc
+CC = gcc
 CFLAGS = -Wall
-files = ortografia.c dicionario.o
-desiredfile = ortografia
 
-all: ${desiredfile}
+all: ortografia
 
-ortografia: ${files}
-	${COMPILER} ${CFLAGS} -o ortografia ${files}
+ortografia: ortografia.o dicionario.o
+	${CC} ${CFLAGS} -o ortografia ortografia.o dicionario.o
 
-dicionario.o: dicionario.c
-	${COMPILER} ${CFLAGS} -c dicionario.c
+ortografia.o: ortografia.c dicionario.h
+	${CC} ${CFLAGS} -c ortografia.c
 
-run: ortografia
-	./ortografia ./brazilian < input.txt > output.txt
+dicionario.o: dicionario.c dicionario.h
+	${CC} ${CFLAGS} -c dicionario.c
+
+clean:
+	rm -f *.o
+
+purge: clean
+	rm -f ortografia
