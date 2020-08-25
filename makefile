@@ -1,19 +1,20 @@
 CC = gcc
 CFLAGS = -Wall
+objects = ortografia.o dicionario.o
 
 all: ortografia
 
-ortografia: ortografia.o dicionario.o
-	${CC} ${CFLAGS} -o ortografia ortografia.o dicionario.o
+# regra de ligacao
+ortografia: ${objects}
 
+# regras de compilacao
 ortografia.o: ortografia.c dicionario.h
-	${CC} ${CFLAGS} -c ortografia.c
-
 dicionario.o: dicionario.c dicionario.h
-	${CC} ${CFLAGS} -c dicionario.c
 
+# remocao de arquivos temporario
 clean:
-	rm -f *.o
+	rm -f ${objects}
 
+# remove tudo sem o codigo fonte
 purge: clean
 	rm -f ortografia
