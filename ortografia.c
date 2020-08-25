@@ -49,7 +49,7 @@ int readStdin(char *input[]) {
 }
 
 // Imprime a palavra iniciada em sentence[i] e terminada no proximo caracter nao letra
-// Se a palvra estiver em dict sera impressa normalmente
+// Se a palvra estiver em dict sera impressa normalmente. exemplo
 // Caso contrario sera impressa com [] em sua volta. [esemplo]
 // Retorna indice da ultima letra da palavra impressa
 int printWord(char **dict, int dictSize, char *sentence, int i) {
@@ -60,9 +60,10 @@ int printWord(char **dict, int dictSize, char *sentence, int i) {
     word[newi - i] = sentence[newi];
   }
   word[newi - i] = '\0';
+  strlwr(word, newi - i);
 
   // Ver se esta no dicionario e imprimir de acordo
-  if (!bsearch(&word, dict, dictSize, sizeof(char **), strcmp_2))
+  if (dictBsearch(word, dict, dictSize) == -1)
     printf("[%s]", word);
   else
     printf("%s", word);
@@ -71,7 +72,6 @@ int printWord(char **dict, int dictSize, char *sentence, int i) {
 }
 
 int main(int argc, char *argv[]) {
-  printf("- Program started.\n");
   makeLocale();
 
   // Leitura do dicionario
@@ -83,7 +83,6 @@ int main(int argc, char *argv[]) {
     dictLines = readDict(&dict, argv[1]);
 
   if (dictLines == -1) {
-    // fprintf(stderr, "< Deu ruim no dicionario %s . Tentando com dicionario do sistema\n", argv[1]);
     dictLines = readDict(&dict, "/usr/share/dict/brazilian");
     if (dictLines == -1) {
       fprintf(stderr, "< Nao foi possivel acessar dicionario do sistema e nem o passado como argumento, fechando programa\n");
@@ -101,7 +100,6 @@ int main(int argc, char *argv[]) {
   int inputSize = readStdin(&input);
 
   // Impressao corrigida da entrada
-  printf("- Entrada:\n");
   for (int i = 0; i < inputSize; i++) {
     if (!isalpha(input[i]))
       fputc(input[i], stdout);
@@ -111,6 +109,5 @@ int main(int argc, char *argv[]) {
   }
 
   // printDict(dict, dictLines);
-  printf("- Terminando o programa\n");
   return 0;
 }

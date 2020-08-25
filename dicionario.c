@@ -49,6 +49,23 @@ int strcmp_2(const void *a, const void *b) {
   return (strcmp(pa, pb));
 }
 
+int dictBsearch(char *key, char **dict, int dictSize) {
+  int first = 0, last = dictSize - 1;
+
+  while (first <= last) {
+    int middle = (first + last) / 2;
+    int cmpresult = strcmp(key, dict[middle]);
+    if (cmpresult == 0)
+      return middle;
+    else if (cmpresult < 0)
+      last = middle - 1;
+    else
+      first = middle + 1;
+  }
+
+  return -1;
+}
+
 // Funcao para visualizar o dicionario
 void printDict(char **dict, int size) {
   for (int i = 0; i < size; i++) {

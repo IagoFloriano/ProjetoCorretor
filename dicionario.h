@@ -18,5 +18,9 @@ void dictToLower(char ***dict, int size);
 // Funcao strcmp so que usavel pela funcao qsort e bsearch
 int strcmp_2(const void *a, const void *b);
 
+// Retorna indice de string "key" em dict
+// Retorna -1 caso "key" nao esteja em dict
+int dictBsearch(char *key, char **dict, int dictSize);
+
 // Funcao para visualizar o dicionario
 void printDict(char **dict, int size);
