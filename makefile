@@ -12,4 +12,4 @@ dicionario.o: dicionario.c
 	${COMPILER} ${CFLAGS} -c dicionario.c
 
 run: ortografia
-	./ortografia ./brazilian
+	./ortografia ./brazilian < input.txt > output.txt
