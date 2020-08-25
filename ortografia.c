@@ -1,4 +1,5 @@
 #include "dicionario.h"
+#include <ctype.h>
 #include <locale.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -6,7 +7,12 @@
 
 // Definine o tamanho de de cada alloc no programa
 #ifndef ALLOCSIZE
-#define ALLOCSIZE 100
+#define ALLOCSIZE 1000
+#endif
+
+// Define o tamanho de uma palavra para o programa
+#ifndef MAXCHARSINWORD
+#define MAXCHARSINWORD 100
 #endif
 
 // Ajusta LC_ALL para ser ISO 8859-1 e fecha o programa e da um aviso em caso de erro
@@ -14,6 +20,13 @@ void makeLocale() {
   if (!setlocale(LC_ALL, "pt_BR.ISO8859-1")) {
     fprintf(stderr, "< Nao foi possivel ajustar o programa ao locale \"pt_BR.ISO8859-1\". Certifique-se de ter esse locale instalado na sua maquina.\n");
     exit(1);
+  }
+}
+
+// Transforma uma string em minuscula
+void strlwr(char *str, int strsize) {
+  for (int i = 0; i < strsize; i++) {
+    str[i] = tolower(str[i]);
   }
 }
 
@@ -33,6 +46,28 @@ int readStdin(char *input[]) {
   }
   (*input)[++inputSize] = '\0';
   return inputSize;
+}
+
+// Imprime a palavra iniciada em sentence[i] e terminada no proximo caracter nao letra
+// Se a palvra estiver em dict sera impressa normalmente
+// Caso contrario sera impressa com [] em sua volta. [esemplo]
+// Retorna indice da ultima letra da palavra impressa
+int printWord(char **dict, int dictSize, char *sentence, int i) {
+  // Salvar palavra na memoria
+  char word[MAXCHARSINWORD];
+  int newi;
+  for (newi = i; isalpha(sentence[newi]); newi++) {
+    word[newi - i] = sentence[newi];
+  }
+  word[newi - i] = '\0';
+
+  // Ver se esta no dicionario e imprimir de acordo
+  if (!bsearch(&word, dict, dictSize, sizeof(char **), strcmp_2))
+    printf("[%s]", word);
+  else
+    printf("%s", word);
+
+  return newi - 1;
 }
 
 int main(int argc, char *argv[]) {
@@ -57,9 +92,23 @@ int main(int argc, char *argv[]) {
   }
   // Fim da leitura do dicionario
 
+  // Deixa todas as palavras do dicionario em letra minuscula e ordena o dicionario novamente
+  dictToLower(&dict, dictLines);
+  qsort(dict, dictLines, sizeof(char *), strcmp_2);
+
   // Leitura do stdin
   char *input = malloc(0);
   int inputSize = readStdin(&input);
+
+  // Impressao corrigida da entrada
+  printf("- Entrada:\n");
+  for (int i = 0; i < inputSize; i++) {
+    if (!isalpha(input[i]))
+      fputc(input[i], stdout);
+    else {
+      i = printWord(dict, dictLines, input, i);
+    }
+  }
 
   // printDict(dict, dictLines);
   printf("- Terminando o programa\n");
