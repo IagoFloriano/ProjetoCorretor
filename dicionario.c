@@ -53,8 +53,8 @@ int stringcompare(const void *a, const void *b) {
   return (strcmp(pa, pb));
 }
 
-void dictSort(char ***dict, int size) {
-  qsort((*dict)[0], size, sizeof(char *), stringcompare);
+void dictSort(char **dict, int size) {
+  qsort(dict, size, sizeof(char *), stringcompare);
 }
 
 // Funcao para visualizar o dicionario

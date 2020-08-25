@@ -12,7 +12,7 @@ int readDict(char ***dict, char *path);
 void dictToLower(char ***dict, int size);
 
 // Funcao para ordenar o dicionario
-void dictSort(char ***dict, int size);
+void dictSort(char **dict, int size);
 
 // Funcao para visualizar o dicionario
 void printDict(char **dict, int size);
