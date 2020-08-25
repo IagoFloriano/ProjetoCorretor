@@ -63,10 +63,13 @@ int printWord(char **dict, int dictSize, char *sentence, int i) {
   strlwr(word, newi - i);
 
   // Ver se esta no dicionario e imprimir de acordo
-  if (dictBsearch(word, dict, dictSize) == -1)
-    printf("[%s]", word);
-  else
-    printf("%s", word);
+  int found = dictBsearch(word, dict, dictSize);
+  if (found == -1)
+    printf("[");
+  for (int j = i; j < newi; j++)
+    printf("%c", sentence[j]);
+  if (found == -1)
+    printf("]");
 
   return newi - 1;
 }
