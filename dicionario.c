@@ -4,10 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifndef MAXCHARSINWORD
-#define MAXCHARSINWORD 100
-#endif
-
 int readDict(char ***dict, char *path) {
   // Abre arquivo e testa se teve sucesso em abrir o arquivo
   FILE *dictFile = fopen(path, "r");
@@ -47,14 +43,10 @@ void dictToLower(char ***dict, int size) {
   }
 }
 
-int stringcompare(const void *a, const void *b) {
+int strcmp_2(const void *a, const void *b) {
   const char *pa = *(const char **)a;
   const char *pb = *(const char **)b;
   return (strcmp(pa, pb));
-}
-
-void dictSort(char **dict, int size) {
-  qsort(dict, size, sizeof(char *), stringcompare);
 }
 
 // Funcao para visualizar o dicionario
