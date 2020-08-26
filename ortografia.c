@@ -111,6 +111,12 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  // printDict(dict, dictLines);
+  // Liberaçao do espaço na memoria
+  for (int i = 0; i <= dictLines; i++) {
+    free(dict[i]);
+  }
+  free(dict);
+  free(input);
+
   return 0;
 }
